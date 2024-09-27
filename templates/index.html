@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Video Generator</h1>
+        <div class="input-container">
+            <input type="text" id="prompt-input" placeholder="Enter your video prompt...">
+            <button id="generate-btn">Generate Video</button>
+        </div>
+        <div id="loading" class="hidden">Generating video...</div>
+        <div id="video-container" class="hidden">
+            <video id="generated-video" controls></video>
+            <div id="download-container">
+                <a id="download-btn" class="download-btn hidden" download>Download Video</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
