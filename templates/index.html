@@ -3,23 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Generator</title>
+    <title>Sesh Labs Video Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>AI Video Generator</h1>
-        <div class="input-container">
-            <input type="text" id="prompt-input" placeholder="Enter your video prompt...">
-            <button id="generate-btn">Generate Video</button>
-        </div>
-        <div id="loading" class="hidden">Generating video...</div>
-        <div id="video-container" class="hidden">
-            <video id="generated-video" controls></video>
-            <div id="download-container">
-                <a id="download-btn" class="download-btn hidden" download>Download Video</a>
+        <header>
+            <h1>Sesh Labs Video Generator</h1>
+            <div class="toggle-container">
+                <div class="toggle-wrapper">
+                    <input type="checkbox" id="dark-mode-toggle" class="toggle-checkbox">
+                    <label for="dark-mode-toggle" class="toggle-label"></label>
+                    <span class="toggle-text">Dark Mode</span>
+                </div>
+                <div class="toggle-wrapper">
+                    <input type="checkbox" id="sound-effect-toggle" class="toggle-checkbox" checked>
+                    <label for="sound-effect-toggle" class="toggle-label"></label>
+                    <span class="toggle-text">Sound Effect</span>
+                </div>
             </div>
-        </div>
+        </header>
+        <main>
+            <section class="input-section">
+                <select id="input-type" aria-label="Select input type">
+                    <option value="text">Text to Video</option>
+                    <option value="image_text">Image + Text</option>
+                    <option value="url">URL to Video</option>
+                    <option value="first_last_frame">First and Last Frame to Video</option>
+                </select>
+                <textarea id="prompt-input" placeholder="Enter your video prompt..." aria-label="Video prompt input" rows="8"></textarea>
+                <input type="url" id="url-input" placeholder="Enter URL for video generation" aria-label="URL input" class="hidden">
+                <div id="image-upload-section" class="hidden">
+                    <div class="image-upload">
+                        <label for="initial-image">Initial Image:</label>
+                        <input type="file" id="initial-image" accept="image/*">
+                    </div>
+                </div>
+                <div id="first-last-frame-section" class="hidden">
+                    <div class="image-upload">
+                        <label for="first-frame">First Frame:</label>
+                        <input type="file" id="first-frame" accept="image/*">
+                    </div>
+                    <div class="image-upload">
+                        <label for="last-frame">Last Frame:</label>
+                        <input type="file" id="last-frame" accept="image/*">
+                    </div>
+                </div>
+                <button id="generate-btn" aria-label="Generate video">
+                    <span class="button-text">Generate Video</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </section>
+            <section id="video-container" class="hidden">
+                <video id="generated-video" controls></video>
+                <div class="download-buttons">
+                    <a id="download-combined-btn" class="download-btn hidden" download>Download Video</a>
+                    <a id="download-audio-btn" class="download-btn hidden" download>Download Audio</a>
+                </div>
+            </section>
+        </main>
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

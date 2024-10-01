@@ -4,31 +4,11 @@ import logging
 from config import Config
 from models.pydantic_models import EnhancedPrompt, VideoGenerationResponse
 
-def generate_video(enhanced_prompt: EnhancedPrompt, initial_image_path: str = None, final_image_path: str = None, url: str = None) -> VideoGenerationResponse:
+def generate_video(enhanced_prompt: EnhancedPrompt, initial_image_url: str = None, first_frame_url: str = None, last_frame_url: str = None) -> VideoGenerationResponse:
     headers = {
         "Authorization": f"Bearer {Config.LUMMA_API_KEY}",
         "Content-Type": "application/json"
     }
-
-    keyframes = {}
-    if url:
-        keyframes["frame0"] = {
-            "type": "image",
-            "url": url
-        }
-    elif initial_image_path:
-        initial_image_url = upload_image(initial_image_path)
-        keyframes["frame0"] = {
-            "type": "image",
-            "url": initial_image_url
-        }
-    
-    if final_image_path:
-        final_image_url = upload_image(final_image_path)
-        keyframes["frame1"] = {
-            "type": "image",
-            "url": final_image_url
-        }
 
     data = {
         "prompt": enhanced_prompt.prompt,
@@ -36,8 +16,24 @@ def generate_video(enhanced_prompt: EnhancedPrompt, initial_image_path: str = No
         "duration_seconds": enhanced_prompt.duration
     }
 
-    if keyframes:
-        data["keyframes"] = keyframes
+    if initial_image_url:
+        data["keyframes"] = {
+            "frame0": {
+                "type": "image",
+                "url": initial_image_url
+            }
+        }
+    elif first_frame_url and last_frame_url:
+        data["keyframes"] = {
+            "frame0": {
+                "type": "image",
+                "url": first_frame_url
+            },
+            "frame1": {
+                "type": "image",
+                "url": last_frame_url
+            }
+        }
 
     logging.info(f"Sending initial request to Lumma API with data: {data}")
 
@@ -69,9 +65,3 @@ def generate_video(enhanced_prompt: EnhancedPrompt, initial_image_path: str = No
         raise Exception("Video generation timed out")
 
     return VideoGenerationResponse(video_url=video_url)
-
-def upload_image(image_path: str) -> str:
-    # Implement image upload logic here
-    # This function should upload the image to a CDN or storage service and return the URL
-    # For now, we'll return a placeholder URL
-    return f"https://example.com/uploaded_image_{image_path.split('/')[-1]}"

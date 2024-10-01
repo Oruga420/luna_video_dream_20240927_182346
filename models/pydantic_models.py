@@ -24,6 +24,7 @@ class SoundEffectResponse(BaseModel):
 
 class FinalVideoResponse(BaseModel):
     video_url: str
+    audio_url: Optional[str] = None
 
     def to_dict(self):
-        return {"video_url": self.video_url}
+        return {"video_url": self.video_url, "audio_url": self.audio_url}
